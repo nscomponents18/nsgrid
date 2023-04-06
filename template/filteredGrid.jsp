@@ -132,6 +132,11 @@
 			return div;
 		};
 		
+		window["themeChanged"] = function(theme)
+		{
+			nsGrid.setTheme(theme);
+		}
+		
 		//# sourceURL=filteredGrid.js
 	</script>
 </div>

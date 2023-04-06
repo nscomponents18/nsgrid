@@ -528,6 +528,11 @@
 			return div;
 		};
 		
+		window["themeChanged"] = function(theme)
+		{
+			nsGrid.setTheme(theme);
+		}
+		
 		//# sourceURL=gridWithExtraHeaderRows.js
 	</script>
 </div>

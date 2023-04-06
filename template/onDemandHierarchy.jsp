@@ -8,6 +8,9 @@
 		  vertical-align: middle;
 		  padding-left: 5px;
 		}
+		.nsDataGridContainer .nsArrowParent {
+			top: 0px;
+		}
 
 	</style>
 	<!-- hierarchical,group,normal -->
@@ -27,7 +30,6 @@
 	<button type="button" onclick="collapseAll();">Collapse</button>
 	<button type="button" onclick="sort();">Sort</button>
 	<button type="button" onclick="changeFontSize();">Change Font Size</button>
-	<button type="button" onclick="changeTheme();">Change Theme</button>
 	
 	<script>
 	var column = [
@@ -39,8 +41,8 @@
 		      		{headerText:"Birth Date",dataField:"birthDate",width:"20%",sortable:true,sortDescending:true,filterRenderer:window["filterRenderer"],priority:5}
 		      	];
 	var  icons = {
-	        rowExpanded: '<img src="https://cdn.rawgit.com/ag-grid/ag-grid-docs/56853d5aa6513433f77ac3f808a4681fdd21ea1d/src/javascript-grid-icons/minus.png" style="width: 12px;padding-right: 2px"/>',
-	        rowCollapsed: '<img src="https://cdn.rawgit.com/ag-grid/ag-grid-docs/56853d5aa6513433f77ac3f808a4681fdd21ea1d/src/javascript-grid-icons/plus.png" style="width: 12px;padding-right: 2px"/>'
+	        rowExpanded: '<img src="https://cdn-icons-png.flaticon.com/128/9068/9068779.png" alt="Minus" title="Minus" width="12" height="12" style="padding-right: 2px"/>',
+	        rowCollapsed: '<img src="https://cdn-icons-png.flaticon.com/128/1828/1828817.png" alt="Plus" title="Plus" width="12" height="12" style="padding-right: 2px">'
 	    };
 	var settingOnDemand = {nsTitle:"OnDemand Hierarchical Grid Demo",type:"hierarchical",enableOnDemandHierarchy:true,onDemandChildDetectionField:"hasChildren",
 				   onDemandChildFetchCallback:"getNthLevelData",enableVirtualScroll:false,
@@ -61,7 +63,9 @@
 			nsGrid.util.addEvent(dgDemo,NSGrid.ROW_UNSELECTED,itemUnSelectHandler);
 			
 			var ajax = new NSAjax();
-			ajax.post("https://nscomponentjava.herokuapp.com/api/getData",{datalength: "10"},{dataType:"json"}).then(
+			var url = window.location.origin.includes("localhost")? "http://localhost:8080/JSLib/hierarchicalFirstLevelData" : 
+				"https://nscomponentjava.herokuapp.com/api/getData";
+			ajax.post(url,{datalength: "10"},{dataType:"json"}).then(
 					function(data) 
 					{
 						console.log(data);
@@ -85,8 +89,9 @@
 		window["getNthLevelData"] = function(item,rowIndex,rowLevel,event)
 		{
 			var ajax = new NSAjax();
-			//https://nscomponentjava.herokuapp.com/api/getChildData
-			ajax.get("https://nscomponentjava.herokuapp.com/api/getChildData",{dataLength: "10",parentID:item.id},{dataType:"json"}).then(
+			var url = window.location.origin.includes("localhost")? "http://localhost:8080/JSLib/hierarchicalNonFirstLevelData" : 
+				"https://nscomponentjava.herokuapp.com/api/getChildData";
+			ajax.get(url,{dataLength: "10",parentID:item.id},{dataType:"json"}).then(
 					function(data) 
 					{
 						console.log(data);
@@ -127,9 +132,9 @@
 			return htmlText;
 		}
 		
-		window["changeTheme"] = function (event)
+		window["themeChanged"] = function(theme)
 		{
-			nsGrid.setTheme("Black");
+			nsGrid.setTheme(theme);
 		}
 		
 		var timeout = null;

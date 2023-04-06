@@ -491,6 +491,11 @@
 			return div;
 		};
 		
+		window["themeChanged"] = function(theme)
+		{
+			nsGrid.setTheme(theme);
+		}
+		
 		//# sourceURL=refreshOnScrollEndGrid.js
 	</script>
 </div>

@@ -8,6 +8,83 @@
 		  vertical-align: middle;
 		  padding-left: 5px;
 		}
+		.detail-con {
+		    padding: 20px;
+		    
+		}
+		
+		.form-con {
+			height: 100%;
+		    display: flex;
+		    align-items: center;
+		    justify-content: center;
+		}
+		
+		.form-inline {  
+		  display: flex;
+		  flex-flow: row wrap;
+		  align-items: center;
+		  width: 100%;
+		  height: 100%;
+    	  justify-content: center;
+		}
+		
+		.form-inline label {
+		  margin: 5px 10px 5px 0;
+		}
+		
+		.form-inline input {
+		  vertical-align: middle;
+		  margin: 5px 10px 5px 0;
+		  padding: 10px;
+		  background-color: #fff;
+		  border: 1px solid #ddd;
+		}
+		
+		.form-inline button {
+		  padding: 10px 20px;
+		  background-color: dodgerblue;
+		  border: 1px solid #ddd;
+		  color: white;
+		  cursor: pointer;
+		}
+		
+		.form-inline button:hover {
+		  background-color: royalblue;
+		}
+		
+		@media (max-width: 800px) {
+		  .form-inline input {
+		    margin: 10px 0;
+		  }
+		  
+		  .form-inline {
+		    flex-direction: column;
+		    align-items: stretch;
+		  }
+		}
+		
+		.loader {
+		  border: 4px solid #f3f3f3;
+		  border-radius: 50%;
+		  border-top: 4px solid #3498db;
+		  width: 40px;
+		  height: 40px;
+		  animation: spin 1s linear infinite;
+		}
+		
+		@keyframes spin {
+		  0% {
+		    transform: rotate(0deg);
+		  }
+		  100% {
+		    transform: rotate(360deg);
+		  }
+		}
+		
+		.hide {
+			display: none;
+		}
 
 	</style>
 	<!-- hierarchical,group,normal -->
@@ -24,18 +101,70 @@
 	</ns-grid> -->
 	<br/>
 	<br/>
-	<button type="button" onclick="showHideLoader();">Show/Hide Loader</button>
-	<button type="button" onclick="dataSourceRefreshHandler();">Change DataSource</button>
-	<button type="button" onclick="columnRefreshHandler();">Change Column</button>
-	<button type="button" onclick="addColumn();">Add Column</button>
-	<button type="button" onclick="hideColumn();">Remove Column</button>
-	<button type="button" onclick="swapColumns();">Swap Column</button>
 	<button type="button" onclick="expandAll();">Expand</button>
 	<button type="button" onclick="collapseAll();">Collapse</button>
-	<button type="button" onclick="sort();">Sort</button>
-	<button type="button" onclick="changeFontSize();">Change Font Size</button>
 	
 	<script>
+	function ChildComponent() {
+	  this.con = null;
+	  this.item = null;
+	}
+	
+	ChildComponent.prototype.init = function(params) {
+		//console.log("here",params);
+		this.con = document.createElement('div');
+		this.con.classList.add("form-con");
+		this.item = params.masterData;
+		var container = params.container;
+		//container.classList.add("detail-con");
+		this.con.innerHTML = '<div class="loader"></div>\r\n' +
+			  '<form class="form-inline hide">\r\n' +
+			  '<label for="fname">Hierarchy:</label><br>\r\n' +
+			  '<input type="text" id="hierarchy" name="hierarchy" value="' + this.item.hierarchy + '" required><br>\r\n' +
+			  '<label for="lname">Employee:</label><br>\r\n' +
+			  '<input type="text" id="employees" name="employees" value="' + this.item.employees + '" required><br><br>\r\n' +
+			  '<button type="submit">Submit</button>\r\n' +
+			'</form> ';
+	};
+	
+	ChildComponent.prototype.getElement = function() {
+	  	return this.con;
+	};
+	
+	ChildComponent.prototype.elementAdded = function(params) {
+		var form = this.con.querySelector("form");
+		form.addEventListener("submit",this.__formSubmitHandler.bind(this));
+		this.__showLoadingEffect();
+	};
+	
+	//every second row which has children, detail(children) will be refreshed everytime the detail is expanded
+	ChildComponent.prototype.renderEverytime = function(params) {
+		if((params.rowIndex % 4) == 0) {
+			return true;
+		}
+		return false;
+	};
+	//private function
+	ChildComponent.prototype.__showLoadingEffect = function() {
+		var self = this;
+		setTimeout(function () {
+			self.con.querySelector(".loader").classList.add("hide");
+			self.con.querySelector(".form-inline").classList.remove("hide");
+		}, 3000); // The loading effect will last for 3000 milliseconds (3 seconds)
+	};
+	
+	ChildComponent.prototype.__formSubmitHandler = function(event) {
+		event.preventDefault();
+		var form = event.target;
+		var parItem = nsGrid.getItemInfoByKeyField(this.item["id"]);
+		parItem.item.hierarchy = form.hierarchy.value;
+		parItem.item.employees = form.employees.value;
+		nsGrid.updateItemInDataSource(parItem.item);
+        nsGrid.updateRowByKeyField(parItem.item["id"]);
+		return false;
+	};
+	
+	
 	var column = [
 		      		{headerText:"Id",dataField:"id",width:"20%",sortable:true,sortDescending:true,draggable:false,resizable:true,minWidth:50,filterRenderer:window["filterRenderer"],priority:1},
 		      		{headerText:"Country",dataField:"country",width:"15%",sortable:true,sortDescending:true,draggable:false,resizable:true,filterRenderer:window["filterRenderer"],priority:2},
@@ -44,20 +173,16 @@
 		      		{headerText:"Employees",dataField:"employees",width:"20%",sortable:false,sortDescending:true,filterRenderer:window["filterRenderer"],priority:4},
 		      		{headerText:"Date",dataField:"date",width:"20%",sortable:true,sortDescending:true,labelFunction:"dateLabelFunction",filterRenderer:window["filterRenderer"],priority:5}
 		      	];
-	var setting = {nsTitle:"Hierarchical Grid Demo",type:"hierarchical",enableVirtualScroll:true,enableColumnSetting:true,
-		 	   enableFilter:true,enableAdvancedFilter:true,enableMouseHover:true,enableMultipleSelection:true,
-		 	   childField:"children",rowKeyField:"id",columnResizable:true,enableVariableRowHeight:false,
-	           columnDraggable:true,rowHeight:22,leftFixedColumn:0,rightFixedColumn:0,
-	           enableExport:true,enableResponsive:true,responsiveMode:"stack",enableMultiSort:true,
-	           heightOffset:250,customClass:{nonFirstBodyColumn:"nonFirstGridBodyCell"}};
+	var masterDetailSetting = {hasChildField:"hasChildren",detailRenderer: ChildComponent,detailRendererParam: {label:"Testing Code"},detailHeight: 100};
+	var setting = {nsTitle:"Master Detail Grid Demo",type:"masterdetail", masterDetailSetting: masterDetailSetting,enableVirtualScroll:true,enableColumnSetting:true,
+		 	   enableFilter:true,enableAdvancedFilter:true,rowKeyField:"id",enableVariableRowHeight:true,enableRowSelection: false,
+	           enableExport:true,heightOffset:250,customClass:{nonFirstBodyColumn:"nonFirstGridBodyCell"}};
 		
-		var numRows = 10000;
-		var numLevels = 200;
 		
 		var rowCount = 0;
 		var nsGrid = null;
 		var arrItems = [];
-		window["loadHierarchicalHandler"] = function ()
+		window["loadMasterCustomDetailHandler"] = function ()
 		{
 			arrItems = []; 
 			var dgDemo = document.getElementById("dgDemo");
@@ -65,44 +190,18 @@
 			getDataSource(null,0,arrItems);
 			nsGrid.setColumn(column);
 			nsGrid.dataSource(arrItems);
-				
-			nsGrid.util.addEvent(dgDemo,NSGrid.ROW_SELECTED,itemSelectHandler);
-			nsGrid.util.addEvent(dgDemo,NSGrid.ROW_UNSELECTED,itemUnSelectHandler);
 		}
 		
-		window["getDataSource"] = function (parentRow, level,arrItems)
+		window["getDataSource"] = function()
 		{
-			if (level > numLevels)
-				return;
-				
-			var numChilds = getRandomNumber(level);    
+			arrItems = [];
+			var numChilds = 500;    
 			for (var i = 0; i < numChilds; i++){
-				if (rowCount < numRows)
-				{
-					var item = {id: rowCount, hierarchy: 'hierarchy ' + (rowCount+1).toString(), supervisor: null, country: 'US', employees: "Employee" + i, price: '10.90', year: '1985',date:new Date(2018, 11, i + 1),checked:true};
-					if(level === 1)
-					{
-						item.hierarchy = 'hie ' + (rowCount+1).toString()
-					}
-					if(level === 2)
-					{
-						item.hierarchy = 'hier ' + (rowCount+1).toString()
-					}
-					if(parentRow)
-					{
-						if(!parentRow["children"])
-						{
-							parentRow["children"] = [];
-						}
-						parentRow["children"].push(item);
-					}
-					else
-					{
-						arrItems.push(item);
-					}
-					rowCount++;
-					getDataSource(item, level + 1,arrItems);
-				}
+				var item = {id: rowCount, hierarchy: 'hierarchy ' + (rowCount+1).toString(), supervisor: null, country: 'US', employees: "Employee" + i, price: '10.90', year: '1985',date:new Date(2018, 11, i + 1),checked:true};
+				item.hierarchy = 'hie ' + (rowCount + 1).toString();
+				item.hasChildren = ((i % 2) === 0);
+				arrItems.push(item);
+				rowCount++;
 			}
 		};
 	
@@ -278,96 +377,6 @@
 		    event.stopImmediatePropagation();
 		}
 		
-		
-		var numRows = 50;
-		var numLevels = 2;
-		
-		var rowCount = 0;
-	    
-		window["getRandomNumber"] = function (level){
-			var nCount = 1 + Math.floor(Math.random() * 10);
-			
-			if (level === 0)
-			{
-				if (numLevels == 0)
-					nCount = numRows;
-				else
-				{
-					var derivative = 1;
-					for (var k = 1; k <= numLevels; k++)
-						derivative = (derivative * nCount) + 1;
-
-					nCount = numRows / derivative + 1;
-					if (nCount < 1000)
-						nCount = 1000;
-				}
-			}
-			
-			return nCount;
-		}
-
-		
-		
-		var showingLoader = false;
-		window["showHideLoader"] = function ()
-		{
-			if(showingLoader)
-			{
-				nsGrid.hideLoader();
-			}
-			else
-			{
-				nsGrid.showLoader();
-			}
-			showingLoader = !showingLoader;
-		}
-		
-		window["dataSourceRefreshHandler"] = function ()
-		{
-			nsGrid.dataSource(arrItems);
-		}
-		
-		window["columnRefreshHandler"] = function ()
-		{
-			nsGrid.setColumn(column);
-			dataSourceRefreshHandler();
-		}
-		
-		window["changeFontSize"] = function ()
-		{
-			nsGrid.setFontSize("14px");
-		}
-		
-		var isReflowView = false;
-		window["changeGridView"] = function ()
-		{
-			isReflowView = !isReflowView;
-			nsGrid.changeDeviceView(isReflowView);
-		}
-		
-		window["addColumn"] = function ()
-		{
-			var column = {};
-			column.headerText = "Price";
-			column.dataField = "price";
-			column.width = "100px";
-			column.sortable = true;
-			column.sortDescending = true;
-			
-			nsGrid.addColumn(column);
-			
-		}
-		
-		window["hideColumn"] = function ()
-		{
-			nsGrid.hideColumn("country");
-		}
-		
-		window["swapColumns"] = function ()
-		{
-			nsGrid.swapColumns(3,4);
-		}
-		
 		window["expandAll"] = function ()
 		{
 			nsGrid.expandAll();
@@ -378,41 +387,6 @@
 			nsGrid.collapseAll();
 		}
 		
-		window["sort"] = function ()
-		{
-			nsGrid.sortBy("year");
-		}
-		
-		window["contextMenuProvider"] = function (item,columnIndex,rowIndex)
-		{
-			console.log(item + "," + columnIndex + "," + rowIndex);
-			var index = columnIndex + rowIndex;
-			var source = [];
-			for(var count = index;count < index + 5;count++)
-			{
-				source.push({title: 'Menu ' + count,iconHTML: '<i class="fa fa-folder-open"></i>',handler: menuClickHandler});
-			}
-			return source;
-		}
-		
-		window["menuClickHandler"] = function(target,item)
-		{
-			if(item)
-			{
-				console.log("Menu with text " + item.title + " was selected for Target " + target.nodeName + " with text as "  + target.innerHTML);			
-			}
-		}
-		//https://github.com/NeXTs/Clusterize.js/blob/master/clusterize.js
-		window["itemSelectHandler"] = function(event)
-		{
-			console.log("Item Selected with details::" + event.detail + " with hierarchy " + event.detail.hierarchy);
-			//console.log("Item Selected with details::" + event.detail + " with index " + event.index);
-		}
-		
-		window["itemUnSelectHandler"] = function(event)
-		{
-			console.log("Item Unselected with details::" + event.detail  + " with hierarchy " + event.detail.hierarchy);
-		}
-		//# sourceURL=hierarchicalGrid.js
+		//# sourceURL=masterCustomDetailGrid.js
 	</script>
 </div>

@@ -448,6 +448,11 @@
 			return Math.floor(Math.random() * 90 + 10);
 		}
 		
+		window["themeChanged"] = function(theme)
+		{
+			nsGrid.setTheme(theme);
+		}
+		
 		var priceInterval = null;
 		window["updatePrices"] = function()
 		{

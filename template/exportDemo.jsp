@@ -160,6 +160,11 @@
 			return footerStyle;
 		}
 		
+		window["themeChanged"] = function(theme)
+		{
+			nsGrid.setTheme(theme);
+		}
+		
 		
 		//# sourceURL=exportDemo.js
 	</script>

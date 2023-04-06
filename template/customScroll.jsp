@@ -419,6 +419,11 @@
 			//console.log("Item Selected with details::" + event.detail + " with index " + event.index);
 		}
 		
+		window["themeChanged"] = function(theme)
+		{
+			nsGrid.setTheme(theme);
+		}
+		
 		window["fixedLeftColumn"] = function (event)
 		{
 			setting["leftFixedColumn"] = 1;

@@ -223,6 +223,11 @@
 		return false;
 	}
 	
+	window["themeChanged"] = function(theme)
+	{
+		nsGrid.setTheme(theme);
+	}
+	
 	window["editItemRenderer"] = function (item,dataField,rowIndex,columnIndex,row)
 	{
 	   if(item)

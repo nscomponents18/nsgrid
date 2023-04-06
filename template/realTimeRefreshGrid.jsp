@@ -80,6 +80,11 @@
 		    	console.error('Got Error ' + evt.data);
 		    };
 		}
+		
+		window["themeChanged"] = function(theme)
+		{
+			nsGrid.setTheme(theme);
+		}
 	
 		
 		

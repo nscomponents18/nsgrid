@@ -35,7 +35,6 @@
 	<button type="button" onclick="collapseAll();">Collapse</button>
 	<button type="button" onclick="sort();">Sort</button>
 	<button type="button" onclick="changeFontSize();">Change Font Size</button>
-	<button type="button" onclick="changeTheme();">Change Theme</button>
 	
 	<script>
 	var column = [
@@ -148,9 +147,9 @@
 			return htmlText;
 		}
 		
-		window["changeTheme"] = function (event)
+		window["themeChanged"] = function(theme)
 		{
-			nsGrid.setTheme("Black");
+			nsGrid.setTheme(theme);
 		}
 		
 		var timeout = null;

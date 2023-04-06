@@ -27,14 +27,14 @@
 		var column = [
 		      		{headerText:"Id",dataField:"id",width:"200px",sortable:true,sortDescending:true,sortType:"number",draggable:false,resizable:true,minWidth:50,priority:1,showMenu:true,
 		      		 filter:{advancedFilterType:"number"},extraRowHeaderRenderer:"extraRowHeaderRenderer"},
-		      		{headerText:"Country",dataField:"country",width:"200px",sortable:true,sortDescending:true,draggable:false,resizable:true,priority:2,showMenu:true,
+		      		{headerText:"Country",dataField:"country",width:"200px",sortable:true,sortDescending:true,draggable:true,resizable:true,priority:2,showMenu:true,
 		      					filter:{enableAdvancedFilter:true},autoSize:false},
-		      		{headerText:"Employees",dataField:"employees",width:"200px",sortable:false,sortDescending:true,headerTruncateToFit:true,
+		      		{headerText:"Employees",dataField:"employees",width:"300px",sortable:false,sortDescending:true,headerTruncateToFit:true,
 		      			      	truncateToFit:true,toolTipRenderer:"employeeToolTipRenderer",priority:4,showMenu:true,
 		      			      	filter:{advancedFilterType:"list"}},//toolTipRenderer:employeeToolTipRenderer
-		      		{headerText:"Price",dataField:"price",toolTipField:"price",width:"200px",sortable:true,sortDescending:true,priority:5
+		      		{headerText:"Price",dataField:"price",toolTipField:"price",width:"300px",sortable:true,sortDescending:true,priority:5
 			      					,showMenu:true,itemRenderer:"priceItemRenderer",enableFilter:false},
-		      		{headerText:"Hierarchy",dataField:"hierarchy",width:"200px",sortable:true,sortDescending:false,priority:1,showMenu:true,
+		      		{headerText:"Hierarchy",dataField:"hierarchy",width:"300px",sortable:true,sortDescending:false,priority:1,showMenu:true,
 		      					filter:{enableAdvancedFilter:true,advancedFilterType:"list"},multiSelectionEditor:NSGrid.MULTI_SELECTION_EDITORS_TEXTAREA},
 		      		{headerText:"Year",dataField:"year",width:"200px",sortable:true,sortDescending:true,priority:3,showMenu:true,
 		      						filter:{advancedFilterType:"number"},extraRowHeaderRenderer:"extraRowHeaderRenderer"},
@@ -46,9 +46,9 @@
 					   enableMouseHover:false,enableColumnMouseHover:false,headerExtraRowCount:1,enableFilter:true,enableAdvancedFilter:true,enablePagination:false,paginationType:"scroll",enableAsyncLoadPagination:false, 
 				 	   paginationMode:"auto",enableMultipleSelection:false,childField:"children",rowKeyField:"id",
 			           customScrollerRequired:false,groupByField:"country,year",columnResizable:true,enableVariableRowHeight:true,
-			           columnDraggable:true,pageSize:100,fetchRecordCallBack:"addRows",totalRecords:600,rowHeight:30,leftFixedColumn:0,rightFixedColumn:1,
+			           columnDraggable:true,pageSize:100,fetchRecordCallBack:"addRows",totalRecords:600,rowHeight:30,leftFixedColumn:2,rightFixedColumn:2,
 			           enableFixedColumnAnimation:false,enableRowMove:false,isSameTableMove:false,rowMoverDropEndHandler:"rowDropEndHandler",
-			           enableContextMenu:false,contextMenuProvider:"contextMenuProvider",enableExport:true,enableResponsive:false,responsiveMode:"stack",
+			           enableContextMenu:true,contextMenuProvider:"contextMenuProvider",enableExport:true,enableResponsive:false,responsiveMode:"stack",
 			           heightOffset:250,customClass:{bodyCell:""},theme:"White",enableCellSelection:false,enableRowSelection:false,columnAutoSize:true,
 			           enableMultiCellSelection:true,multiCellSelectionSetting:multiCellSelectionSetting,enableColumnSetting:true};
 		var nsGrid = null;
@@ -485,6 +485,11 @@
 		window["generateRandomNumbers"] = function()
 		{
 			return Math.floor(Math.random() * 90 + 10);
+		}
+		
+		window["themeChanged"] = function(theme)
+		{
+			nsGrid.setTheme(theme);
 		}
 		
 		var priceInterval = null;

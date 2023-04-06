@@ -500,6 +500,11 @@
 		console.log("Item Unselected with details::" + event.detail  + " with hierarchy " + event.detail.hierarchy);
 	}
 	
+	window["themeChanged"] = function(theme)
+	{
+		nsGrid.setTheme(theme);
+	}
+	
 	//# sourceURL=groupingGrid.js
 	</script>
 </div>

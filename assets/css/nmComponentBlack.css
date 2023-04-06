@@ -133,7 +133,8 @@
 }
 /*************End of Modal Component ***************/
 .nmPageBodyBlack .checkbox,
-.nmPageBodyBlack .radio 
+.nmPageBodyBlack .radio,
+.nmPageBodyBlack .select
 {
   color: #FFFFFF;
 }

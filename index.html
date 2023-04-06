@@ -26,17 +26,35 @@
     <link href="assets/css/nmComponent.css" rel="stylesheet" type="text/css" />
     <link href="assets/css/nmComponentWhite.css" rel="stylesheet" type="text/css" />
     <link href="assets/css/nmComponentBlack.css" rel="stylesheet" type="text/css" />
-    <link href="https://unpkg.com/nscontainerbase@0.3.4/nsComponent.min.css" rel="stylesheet" type="text/css" />
-   	<link href="https://unpkg.com/nsscroller@0.3.4/nsScroller.min.css" rel="stylesheet" type="text/css" />
-    <link href="https://unpkg.com/nsgrid@0.3.4/nsGrid.min.css" rel="stylesheet" type="text/css" />
-    <link href="https://unpkg.com/nsdatepicker@0.3.4/nsDatePicker.min.css" rel="stylesheet" type="text/css" />
-    <link href="https://unpkg.com/nsnavigation@0.3.4/nsNavigation.min.css" rel="stylesheet" type="text/css" />
+    
+    <link href="https://unpkg.com/nscontainerbase@0.4.2/nsComponent.min.css" rel="stylesheet" type="text/css" />
+   	<link href="https://unpkg.com/nsscroller@0.4.2/nsScroller.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://unpkg.com/nsgrid@0.4.2/nsGrid.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://unpkg.com/nsdatepicker@0.4.2/nsDatePicker.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://unpkg.com/nsnavigation@0.4.2/nsNavigation.min.css" rel="stylesheet" type="text/css" />
+    
+    <!-- <link href="/JSLib/lib/css/com/org/nsGrid.css" rel="stylesheet" type="text/css" />
+    <link href="/JSLib/lib/css/com/org/nsMenu.css" rel="stylesheet" type="text/css" />
+    <link href="/JSLib/lib/css/com/org/nsComponent.css" rel="stylesheet" type="text/css" />
+    <link href="/JSLib/lib/css/com/org/nsPagination.css" rel="stylesheet" type="text/css" />
+    <link href="/JSLib/lib/css/com/org/nsList.css" rel="stylesheet" type="text/css" />
+    <link href="/JSLib/lib/css/com/org/nsScroller.css" rel="stylesheet" type="text/css" />
+    <link href="/JSLib/lib/css/com/org/nsCalendar.css" rel="stylesheet">
+    <link href="/JSLib/lib/css/com/org/nsDatePicker.css" rel="stylesheet">
+    <link href="/JSLib/lib/css/com/org/nsNavigation.css" rel="stylesheet">
+	<link href="/JSLib/lib/css/com/org/nsFloatingLabel.css" rel="stylesheet"> -->
     <style>
     	.nsNavHeader .nsNavSearchContainer
 		{
 			padding: 0px 10px;
 			padding-bottom: 3px;
 		}
+		/*.nsGridRow > .nsGridCell:nth-child(1) {
+    left: 0px;
+    background-color: rgb(251, 251, 251);
+    position: sticky !important;
+    z-index: 1;
+}*/
     </style>
   </head>
   <body>
@@ -81,16 +99,47 @@
 			<footer class="nmPageFooter"><strong>Copyright © 2021 <a href="nscomponent.com">NSComponent</a>.</strong> All rights reserved.</footer>
 		</div>
 	</div>
-     <script src="https://unpkg.com/nscomputil@0.3.4"></script>
-	 <script src="https://unpkg.com/nssvg@0.3.4"></script>
-	 <script src="https://unpkg.com/nscontainerbase@0.3.4"></script>
-	 <script src="https://unpkg.com/nspluggins@0.3.4"></script>
-	 <script src="https://unpkg.com/nsscroller@0.3.4"></script>
-	 <script src="https://unpkg.com/nsgrid@0.3.4"></script>
-	 <script src="https://unpkg.com/nsrouter@0.3.4"></script>
-	 <script src="https://unpkg.com/nsdatepicker@0.3.4"></script>
+     <!--  <script src="https://unpkg.com/nscomputil@0.4.2"></script>
+	 <script src="https://unpkg.com/nssvg@0.4.2"></script>
+	 <script src="https://unpkg.com/nscontainerbase@0.4.2"></script>
+	 <script src="https://unpkg.com/nspluggins@0.4.2"></script>
+	 <script src="https://unpkg.com/nsscroller@0.4.2"></script>
+	 <script src="https://unpkg.com/nsgrid@0.4.2"></script>
+	 <script src="https://unpkg.com/nsrouter@0.4.2"></script>
+	 <script src="https://unpkg.com/nsdatepicker@0.4.2"></script>
 	 <script src="https://unpkg.com/nsajax@0.3.2"></script>
-	 <script src="https://unpkg.com/nsnavigation@0.3.4"></script>
+	 <script src="https://unpkg.com/nsnavigation@0.4.2"></script>-->
+	 
+	<script src="/JSLib/lib/com/org/util/nsIEUtils.js"></script>
+	<script src="/JSLib/lib/com/org/util/nsUtil.js"></script>
+	<script src="/JSLib/lib/com/org/util/nsPluggins.js"></script>
+	<script src="/JSLib/lib/com/org/util/nsTouchToMouse.js"></script>
+	<script src="/JSLib/lib/com/org/prototype/base/nsContainerBase.js"></script> 
+	<script src="/JSLib/lib/com/org/util/nsPagination.js"></script>
+	<script src="/JSLib/lib/com/org/util/nsScrollAnimator.js"></script>
+	<script src="/JSLib/lib/com/org/util/nsScroller.js"></script>
+	<script src="/JSLib/lib/com/org/util/nsSVG.js"></script>
+	<script src="/JSLib/lib/com/org/util/nsMenu.js"></script>
+	<script src="/JSLib/lib/com/org/util/nsVirtualScroll.js"></script>
+	<script src="/JSLib/lib/com/org/util/nsFlatGrid.js"></script>
+	<script src="/JSLib/lib/com/org/util/nsGroupingGrid.js"></script>
+	<script src="/JSLib/lib/com/org/util/nsHierarchicalGrid.js"></script>
+	<script src="/JSLib/lib/com/org/util/nsMasterDetailGrid.js"></script>
+	<script src="/JSLib/lib/com/org/util/nsFilter.js"></script>
+	<script src="/JSLib/lib/com/org/util/nsGridPluggins.js"></script>
+	<script src="/JSLib/lib/com/org/prototype/nsGrid.js"></script>
+	<script src="/JSLib/lib/com/org/prototype/nsList.js"></script>
+	<script src="/JSLib/lib/com/org/util/nsXlsxExport.js"></script>
+	<script src="/JSLib/lib/com/org/util/nsZip.js"></script>
+	<script src="/JSLib/lib/com/org/util/nsExport.js"></script>
+	<script src="/JSLib/lib/com/org/util/nsRouter.js"></script>
+	<script src="/JSLib/lib/com/org/util/nsDateUtil.js"></script>
+	<script src="/JSLib/lib/com/org/util/nsAjax.js"></script>
+	<script src="/JSLib/lib/com/org/prototype/nsCalendar.js"></script>
+	<script src="/JSLib/lib/com/org/prototype/nsDatePicker.js"></script>
+	<script src="/JSLib/lib/com/org/util/nsFloatingLabel.js"></script>
+	<script src="/JSLib/lib/com/org/prototype/nsNavigation.js"></script>
+	 
 	 <script>
 	 	 var nsNav = null;
 		 var nsRouter = null;
@@ -146,8 +195,17 @@
 				 				{menuName:"footerWithCustomScroll",link:"#Footer With CustomScroll",iconBeforeHtml:"<i class='fa fa-home' aria-hidden='true'></i>"},
 				 				{menuName:"Export Demo",link:"#export",iconBeforeHtml:"<i class='fa fa-home' aria-hidden='true'></i>"},
 				 				{menuName:"Real Time Refresh",link:"#realTimeRefresh",iconBeforeHtml:"<i class='fa fa-home' aria-hidden='true'></i>"},
-					
+				 				{menuName:"Master Detail",link:"#masterDetail",iconBeforeHtml:"<i class='fa fa-home' aria-hidden='true'></i>"},
+				 				{menuName:"Master Custom Detail",link:"#masterCustomDetail",iconBeforeHtml:"<i class='fa fa-home' aria-hidden='true'></i>"},
 			     			  ];
+			    var selectedMenu = location.hash || "#hierarchical";
+			    var selectedMenuItem = null;
+			    for(var count = 0;count < dataSource.length;count++) {
+			    	if(dataSource[count].link === selectedMenu) {
+			    		selectedMenuItem = dataSource[count];
+			    		break;
+			    	}
+			    }
 			 	var divNavigation = getElem("#divNavigation");
 		        var navSetting = {header:"NAVIGATION",showCollapseIcon:true,iconCollapse:"<i class='fa fa-bars pull-right'></i>",titleField:"menuName",childField:"childMenus",
 								  iconPosition:"right",iconMenuExpanded:"<i class='fa fa-angle-left'></i>",iconMenuCollapsed:"<i class='fa fa-angle-left'></i>",collapseTopOffset:-10,
@@ -156,6 +214,9 @@
 			 	divNavigation.addEventListener(NSNavigation.NAVIGATION_CLOSE_START,navEventHandler);
 			 	divNavigation.addEventListener(NSNavigation.NAVIGATION_MENU_SELECTED,navEventHandler);
 				nsNav = new NSNavigation(divNavigation,navSetting);
+				if(selectedMenuItem) {
+					nsNav.selectMenu(selectedMenuItem);
+				}
 				navEventHandler(null,"navigationOpenStart");
 		 }
 		 
@@ -187,9 +248,12 @@
 						        {route:"/footerWithCustomScroll",templateUrl:"template/footerGridWithCustomScroll.jsp",callback:"loadFooterGridWithCustomScrollHandler",handler:loadTemplateRef},
 						        {route:"/export",templateUrl:"template/exportDemo.jsp",callback:"loadExportDemoHandler",handler:loadTemplateRef},
 						        {route:"/realTimeRefresh",templateUrl:"template/realTimeRefreshGrid.jsp",callback:"loadRealTimeRefreshDemoHandler",handler:loadTemplateRef},
+						        {route:"/masterDetail",templateUrl:"template/masterDetailGrid.jsp",callback:"loadMasterDetailHandler",handler:loadTemplateRef},
+						        {route:"/masterCustomDetail",templateUrl:"template/masterCustomDetailGrid.jsp",callback:"loadMasterCustomDetailHandler",handler:loadTemplateRef},
 						      ];
 				var setting = {mode:"hash",defaultRoute:"/hierarchical"};//,templateTarget:"myDiv"
 				nsRouter = new NSRouter(arrRoute,setting);
+				console.log(nsRouter.getCurrentRoute());
 		 }
 		 
 		 function navEventHandler(event,eventType)
@@ -208,7 +272,7 @@
 	            var item = event["detail"];
 	            if(nsRouter)// && (!this.selectedMenu || this.selectedMenu.link != item.link)
 	            {
-	                //nsRouter.routeTo("asyncloading");//item.link);
+	                //nsRouter.routeTo(item.link);
 	                selectedMenu = item;
 	            }
 	          break;
@@ -250,6 +314,7 @@
 	        if(selectedTheme && selectedTheme != "-1")
 	        {
 	        	document.body.setAttribute("class","nmPageBody" + selectedTheme);
+	        	themeChangeHandler(selectedTheme);
 	        	util.dispatchEvent(document.body,"themeChanged",{selectedTheme: selectedTheme},{selectedTheme: selectedTheme});
 	        }
 	     }
@@ -282,6 +347,21 @@
 		 	{
 		 		clearInterval(callbackInterval);
 		 		window[item["callback"]]();
+		 	}
+		 }
+		 
+		 function themeChangeHandler(selectedTheme)
+		 {
+		 	if(selectedTheme)
+		 	{
+		 		if(nsNav)
+		 		{
+		 			nsNav.setTheme(selectedTheme);	
+		 		}
+		 		if(window["themeChanged"])
+		 		{
+		 			window["themeChanged"](selectedTheme);	
+		 		}
 		 	}
 		 }
 		 

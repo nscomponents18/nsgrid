@@ -377,6 +377,11 @@
 			console.log("Menu with text " + item.title + " was selected for Target " + target.nodeName + " with text as "  + target.innerHTML);			
 		}
 	}
+	
+	window["themeChanged"] = function(theme)
+	{
+		nsGrid.setTheme(theme);
+	}
 	//var setting = {cell:cell,row:row,item:item,rowIndex:rowIndex,cellIndex:cell.cellIndex,position:position,defaultValue:currentValue,
 				//commitChanges:commitChanges,cancelChanges:cancelChanges,validator:editorSetting.validator,setting:editorSetting,column:objColumn};
 	window["numericEditor"] = function()

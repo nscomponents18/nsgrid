@@ -90,6 +90,11 @@
 			return htmlText;
 		}
 		
+		window["themeChanged"] = function(theme)
+		{
+			nsGrid.setTheme(theme);
+		}
+		
 		//# sourceURL=footerGrid.js
 	</script>
 </div>

@@ -470,6 +470,11 @@
 			}
 			return div;
 		};
+		
+		window["themeChanged"] = function(theme)
+		{
+			nsGrid.setTheme(theme);
+		}
 				
 		//# sourceURL=mobileView.js
 	</script>

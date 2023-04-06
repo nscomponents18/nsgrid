@@ -8,7 +8,6 @@
 		  vertical-align: middle;
 		  padding-left: 5px;
 		}
-
 	</style>
 	<!-- hierarchical,group,normal -->
 	<!-- scroll,pages -->
@@ -24,18 +23,25 @@
 	</ns-grid> -->
 	<br/>
 	<br/>
-	<button type="button" onclick="showHideLoader();">Show/Hide Loader</button>
-	<button type="button" onclick="dataSourceRefreshHandler();">Change DataSource</button>
-	<button type="button" onclick="columnRefreshHandler();">Change Column</button>
-	<button type="button" onclick="addColumn();">Add Column</button>
-	<button type="button" onclick="hideColumn();">Remove Column</button>
-	<button type="button" onclick="swapColumns();">Swap Column</button>
 	<button type="button" onclick="expandAll();">Expand</button>
 	<button type="button" onclick="collapseAll();">Collapse</button>
-	<button type="button" onclick="sort();">Sort</button>
-	<button type="button" onclick="changeFontSize();">Change Font Size</button>
+	<button type="button" onclick="expandRowWithId2();">Expand Row With ID 2</button>
+	<button type="button" onclick="collapseRowWithId2();">Collapse Row With ID 2</button>
 	
 	<script>
+	var gridDetailColumn = [
+  		{headerText:"Id",dataField:"id",width:"200px",sortable:true,sortDescending:true,sortType:"number"},
+  		{headerText:"Country",dataField:"country",width:"200px",sortable:true,sortDescending:true},
+  		{headerText:"Employees",dataField:"employees",width:"300px",sortable:false,sortDescending:true,headerTruncateToFit:true,
+  			      	truncateToFit:true},
+  		{headerText:"Price",dataField:"price",toolTipField:"price",width:"300px",sortable:true,sortDescending:true},
+  		{headerText:"Hierarchy",dataField:"hierarchy",width:"300px",sortable:true,sortDescending:false},
+  		{headerText:"Year",dataField:"year",width:"200px",sortable:true,sortDescending:true},
+  		{headerText:"Date",dataField:"date",width:"200px",sortable:true,sortDescending:true,labelFunction:"dateLabelFunction"}
+  	];
+	//nsTitle:"Flat Grid Demo",
+	var gridDetailSetting = {type:"normal",enableVirtualScroll:true};
+	
 	var column = [
 		      		{headerText:"Id",dataField:"id",width:"20%",sortable:true,sortDescending:true,draggable:false,resizable:true,minWidth:50,filterRenderer:window["filterRenderer"],priority:1},
 		      		{headerText:"Country",dataField:"country",width:"15%",sortable:true,sortDescending:true,draggable:false,resizable:true,filterRenderer:window["filterRenderer"],priority:2},
@@ -44,20 +50,56 @@
 		      		{headerText:"Employees",dataField:"employees",width:"20%",sortable:false,sortDescending:true,filterRenderer:window["filterRenderer"],priority:4},
 		      		{headerText:"Date",dataField:"date",width:"20%",sortable:true,sortDescending:true,labelFunction:"dateLabelFunction",filterRenderer:window["filterRenderer"],priority:5}
 		      	];
-	var setting = {nsTitle:"Hierarchical Grid Demo",type:"hierarchical",enableVirtualScroll:true,enableColumnSetting:true,
-		 	   enableFilter:true,enableAdvancedFilter:true,enableMouseHover:true,enableMultipleSelection:true,
-		 	   childField:"children",rowKeyField:"id",columnResizable:true,enableVariableRowHeight:false,
+	function generateDetailSource(masterItem) {
+		var totalRecords = 50;
+		var arrItem = [];
+		var masterHierarchy = masterItem;
+		for(var count = 0;count < totalRecords;count++)
+		{
+			var item = {id: count, hierarchy: masterHierarchy + ' ' + count, supervisor: "Supervisor " + count, country: masterItem.country, employees: "EmployeesEmployeesEmployees" + count, price: (10 * count), year: 1985 + count,checked:false};
+			var date = new Date();
+	        date.setFullYear(2015, Math.floor(Math.random() * 12), Math.floor(Math.random() * 27));
+	        date.setHours(Math.floor(Math.random()*23), Math.floor(Math.random()*59), Math.floor(Math.random()*59), 0);
+	        item["date"] = date;
+	        arrItem.push(item);
+		}
+		return arrItem;
+	};
+	function detailDataSourceCallback(param) {
+		var source = generateDetailSource(param.masterData);
+		param.setDataSource(source);
+	}
+	var totalRowWithChildren = false;
+	function renderDetailGridEverytime(params) {
+		if((params.rowIndex % 4) == 0 && totalRowWithChildren < 5) {
+			totalRowWithChildren++;
+			return true;
+		}
+		return false;
+	};
+	function getDetailGridHTML(params) {
+		var item = params.masterData;
+		return (
+		        '<div style="height: 100%; background-color: #EDF6FF; padding: 20px; box-sizing: border-box;">' +
+		        '  <div style="height: 10%; padding: 2px; font-weight: bold;"> This Grid is for Id ' + item.id +
+		        '</div>' +
+		        '  <div data-ns-ref="detailGrid" style="height: 90%;"></div>' +
+		        '</div>'
+		 );
+	};
+	var masterDetailSetting = {hasChildField:"hasChildren",detailHeight: 400,
+			detailGridSetting: gridDetailSetting,detailColumns: gridDetailColumn,detailDataSourceCallback: detailDataSourceCallback,
+			gridRefreshEverytimeCallback: renderDetailGridEverytime,gridHtmlCallback: getDetailGridHTML};
+	var setting = {nsTitle:"Master Detail Grid Demo",type:"masterdetail", masterDetailSetting: masterDetailSetting,enableVirtualScroll:false,enableColumnSetting:true,
+		 	   enableFilter:true,enableAdvancedFilter:true,rowKeyField:"id",columnResizable:true,enableVariableRowHeight:true,
 	           columnDraggable:true,rowHeight:22,leftFixedColumn:0,rightFixedColumn:0,
-	           enableExport:true,enableResponsive:true,responsiveMode:"stack",enableMultiSort:true,
-	           heightOffset:250,customClass:{nonFirstBodyColumn:"nonFirstGridBodyCell"}};
+	           enableExport:true,heightOffset:250,customClass:{nonFirstBodyColumn:"nonFirstGridBodyCell"}};
 		
-		var numRows = 10000;
-		var numLevels = 200;
 		
 		var rowCount = 0;
 		var nsGrid = null;
 		var arrItems = [];
-		window["loadHierarchicalHandler"] = function ()
+		window["loadMasterDetailHandler"] = function ()
 		{
 			arrItems = []; 
 			var dgDemo = document.getElementById("dgDemo");
@@ -65,44 +107,18 @@
 			getDataSource(null,0,arrItems);
 			nsGrid.setColumn(column);
 			nsGrid.dataSource(arrItems);
-				
-			nsGrid.util.addEvent(dgDemo,NSGrid.ROW_SELECTED,itemSelectHandler);
-			nsGrid.util.addEvent(dgDemo,NSGrid.ROW_UNSELECTED,itemUnSelectHandler);
 		}
 		
-		window["getDataSource"] = function (parentRow, level,arrItems)
+		window["getDataSource"] = function()
 		{
-			if (level > numLevels)
-				return;
-				
-			var numChilds = getRandomNumber(level);    
+			arrItems = [];
+			var numChilds = 50;    
 			for (var i = 0; i < numChilds; i++){
-				if (rowCount < numRows)
-				{
-					var item = {id: rowCount, hierarchy: 'hierarchy ' + (rowCount+1).toString(), supervisor: null, country: 'US', employees: "Employee" + i, price: '10.90', year: '1985',date:new Date(2018, 11, i + 1),checked:true};
-					if(level === 1)
-					{
-						item.hierarchy = 'hie ' + (rowCount+1).toString()
-					}
-					if(level === 2)
-					{
-						item.hierarchy = 'hier ' + (rowCount+1).toString()
-					}
-					if(parentRow)
-					{
-						if(!parentRow["children"])
-						{
-							parentRow["children"] = [];
-						}
-						parentRow["children"].push(item);
-					}
-					else
-					{
-						arrItems.push(item);
-					}
-					rowCount++;
-					getDataSource(item, level + 1,arrItems);
-				}
+				var item = {id: rowCount, hierarchy: 'hierarchy ' + (rowCount+1).toString(), supervisor: null, country: 'US', employees: "Employee" + i, price: '10.90', year: '1985',date:new Date(2018, 11, i + 1),checked:true};
+				item.hierarchy = 'hie ' + (rowCount + 1).toString();
+				item.hasChildren = ((i % 2) === 0);
+				arrItems.push(item);
+				rowCount++;
 			}
 		};
 	
@@ -278,96 +294,6 @@
 		    event.stopImmediatePropagation();
 		}
 		
-		
-		var numRows = 50;
-		var numLevels = 2;
-		
-		var rowCount = 0;
-	    
-		window["getRandomNumber"] = function (level){
-			var nCount = 1 + Math.floor(Math.random() * 10);
-			
-			if (level === 0)
-			{
-				if (numLevels == 0)
-					nCount = numRows;
-				else
-				{
-					var derivative = 1;
-					for (var k = 1; k <= numLevels; k++)
-						derivative = (derivative * nCount) + 1;
-
-					nCount = numRows / derivative + 1;
-					if (nCount < 1000)
-						nCount = 1000;
-				}
-			}
-			
-			return nCount;
-		}
-
-		
-		
-		var showingLoader = false;
-		window["showHideLoader"] = function ()
-		{
-			if(showingLoader)
-			{
-				nsGrid.hideLoader();
-			}
-			else
-			{
-				nsGrid.showLoader();
-			}
-			showingLoader = !showingLoader;
-		}
-		
-		window["dataSourceRefreshHandler"] = function ()
-		{
-			nsGrid.dataSource(arrItems);
-		}
-		
-		window["columnRefreshHandler"] = function ()
-		{
-			nsGrid.setColumn(column);
-			dataSourceRefreshHandler();
-		}
-		
-		window["changeFontSize"] = function ()
-		{
-			nsGrid.setFontSize("14px");
-		}
-		
-		var isReflowView = false;
-		window["changeGridView"] = function ()
-		{
-			isReflowView = !isReflowView;
-			nsGrid.changeDeviceView(isReflowView);
-		}
-		
-		window["addColumn"] = function ()
-		{
-			var column = {};
-			column.headerText = "Price";
-			column.dataField = "price";
-			column.width = "100px";
-			column.sortable = true;
-			column.sortDescending = true;
-			
-			nsGrid.addColumn(column);
-			
-		}
-		
-		window["hideColumn"] = function ()
-		{
-			nsGrid.hideColumn("country");
-		}
-		
-		window["swapColumns"] = function ()
-		{
-			nsGrid.swapColumns(3,4);
-		}
-		
 		window["expandAll"] = function ()
 		{
 			nsGrid.expandAll();
@@ -378,41 +304,16 @@
 			nsGrid.collapseAll();
 		}
 		
-		window["sort"] = function ()
+		window["expandRowWithId2"] = function ()
 		{
-			nsGrid.sortBy("year");
+			nsGrid.expandByKeyField(2);
 		}
 		
-		window["contextMenuProvider"] = function (item,columnIndex,rowIndex)
+		window["collapseRowWithId2"] = function ()
 		{
-			console.log(item + "," + columnIndex + "," + rowIndex);
-			var index = columnIndex + rowIndex;
-			var source = [];
-			for(var count = index;count < index + 5;count++)
-			{
-				source.push({title: 'Menu ' + count,iconHTML: '<i class="fa fa-folder-open"></i>',handler: menuClickHandler});
-			}
-			return source;
+			nsGrid.collapseByKeyField(2);
 		}
 		
-		window["menuClickHandler"] = function(target,item)
-		{
-			if(item)
-			{
-				console.log("Menu with text " + item.title + " was selected for Target " + target.nodeName + " with text as "  + target.innerHTML);			
-			}
-		}
-		//https://github.com/NeXTs/Clusterize.js/blob/master/clusterize.js
-		window["itemSelectHandler"] = function(event)
-		{
-			console.log("Item Selected with details::" + event.detail + " with hierarchy " + event.detail.hierarchy);
-			//console.log("Item Selected with details::" + event.detail + " with index " + event.index);
-		}
-		
-		window["itemUnSelectHandler"] = function(event)
-		{
-			console.log("Item Unselected with details::" + event.detail  + " with hierarchy " + event.detail.hierarchy);
-		}
-		//# sourceURL=hierarchicalGrid.js
+		//# sourceURL=masterDetailGrid.js
 	</script>
 </div>

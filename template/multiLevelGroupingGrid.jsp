@@ -1,4 +1,9 @@
 <div>
+	<style>
+		.nsDataGridContainer .nsArrowParent {
+			top: 0px;
+		}
+	</style>
 	<!-- hierarchical,group,normal -->
 	<!-- scroll,pages -->
 	<!-- auto,manual -->
@@ -46,8 +51,8 @@
 		      	];
 	var multiLevelGroupColumn = {headerText:"Grouped Column",dataField:"group",width:"10%",resizable:true,autoSize:true,minWidth:50,priority:1};
 	var  icons = {
-	        rowExpanded: '<img src="https://cdn.rawgit.com/ag-grid/ag-grid-docs/56853d5aa6513433f77ac3f808a4681fdd21ea1d/src/javascript-grid-icons/minus.png" style="width: 12px;padding-right: 2px"/>',
-	        rowCollapsed: '<img src="https://cdn.rawgit.com/ag-grid/ag-grid-docs/56853d5aa6513433f77ac3f808a4681fdd21ea1d/src/javascript-grid-icons/plus.png" style="width: 12px;padding-right: 2px"/>'
+	        rowExpanded: '<img src="https://cdn-icons-png.flaticon.com/128/9068/9068779.png" alt="Minus" title="Minus" width="12" height="12" style="padding-right: 2px"/>',
+	        rowCollapsed: '<img src="https://cdn-icons-png.flaticon.com/128/1828/1828817.png" alt="Plus" title="Plus" width="12" height="12" style="padding-right: 2px">'
 	    };
 	var setting = {nsTitle:"Multi Level Grouping Grid Demo",type:"group",isSingleLevelGrouping:"false",
 					enableVirtualScroll:true,groupByField:"country,year",
@@ -483,6 +488,11 @@
 	window["itemUnSelectHandler"] = function (event)
 	{
 		console.log("Item Unselected with details::" + event.detail  + " with hierarchy " + event.detail.hierarchy);
+	}
+	
+	window["themeChanged"] = function(theme)
+	{
+		nsGrid.setTheme(theme);
 	}
 	
 	//# sourceURL=multiLevelGroupingGrid.js

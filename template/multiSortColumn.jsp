@@ -477,6 +477,11 @@
 			}
 			return div;
 		};
+		
+		window["themeChanged"] = function(theme)
+		{
+			nsGrid.setTheme(theme);
+		}
 				
 		//# sourceURL=multiSortColumn.js
 	</script>
